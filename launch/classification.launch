@@ -1,0 +1,10 @@
+<launch>
+
+  <node name="orientation_grabber" pkg="rospix_classification" type="classification.py" output="screen" respawn="true">
+
+    <!-- subscribed topics -->
+    <remap from="~image_in" to="rospix/sensor_0/image" />
+
+  </node>
+
+</launch>
