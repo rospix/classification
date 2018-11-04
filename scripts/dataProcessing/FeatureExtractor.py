@@ -37,6 +37,7 @@ EXTRACTORS_LIST = (("area", area, {}),
                    ("bwidth", bwidth, {}))
 
 class FeatureExtractor():
+
     def extract_features(self, segments_collection, extractors_list=EXTRACTORS_LIST):
         """
         Perform feature extraction for a list of segments. The list is modified in-place to
@@ -56,3 +57,24 @@ class FeatureExtractor():
                 feature_value = fcn(image.get_bitmap(), **kwargs)
                 feat_dict[name] = feature_value
             image.set_metadata(key='features_dict', data=feat_dict)
+
+    def extract_features_direct(self, segment, extractors_list=EXTRACTORS_LIST):
+        """
+        Perform feature extraction for a list of segments. The list is modified in-place to
+        conserve memory.
+        :param segments_collection: list of segments for which the features should be calculated
+        :param extractors_list: ((name1, fcn1, dict_of_arguments1),
+        (name2, fcn2, dict_of_arguments2),...)
+        fcn must look like: fcn(bitmap[mxn], **kwargs) and must return feature value
+        :return:
+        """
+
+        feat_dict = dict()
+        for extractor_tuple in extractors_list:
+            name = extractor_tuple[0]
+            fcn = extractor_tuple[1]
+            kwargs = extractor_tuple[2]
+            feature_value = fcn(segment.get_bitmap(), **kwargs)
+            feat_dict[name] = feature_value
+
+        return feat_dict
