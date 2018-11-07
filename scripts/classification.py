@@ -10,13 +10,18 @@ import numpy
 from dataProcessing.FeatureExtractor import FeatureExtractor
 from dataProcessing.ImagePreprocessor import ImagePreprocessor
 
-from rospix.msg import Image
+from rospix.msg import Image as RospixImage
 from dataManager.DataContainer import BitmapContainer_Image, BitmapContainer_Segment
 from dataManager.DataManager import POSSIBLE_LABELS, FEATURE_NAMES, NUMBERS_LABELS_MAP
 
 from sklearn.externals import joblib
-
 from sklearn.pipeline import Pipeline
+import cv2
+from cv_bridge import CvBridge, CvBridgeError
+
+from sensor_msgs.msg import Image
+
+from ppretty import ppretty
 
 NUMBERS_LABELS_MAP = {-1:'none',
                       1:'dot',
@@ -33,11 +38,16 @@ class Classification:
 
     def imageCallback(self, data):
 
-        np_image = numpy.zeros((256, 256))
+        np_image = numpy.zeros((256, 256), numpy.uint16)
 
-        for i in range(0, 256):
-            for j in range(0, 256):
-                np_image[i, j] = data.image[i+255*j]
+        for i,pixel in enumerate(data.image):
+
+            x = i // 256
+            y = i % 256
+
+            np_image[x, y] = pixel
+
+        np_image = np_image.astype(numpy.uint16)
 
         # segment the image
         segments = self.image_preprocessor.segmentate_image(np_image)
@@ -63,8 +73,45 @@ class Classification:
 
         y_unknown = self.pipeline.predict(np_features)
 
-        for i, track_type in enumerate(y_unknown):
-            print("segment: {}, class: {}".format(i, NUMBERS_LABELS_MAP[track_type]))
+        # for i, track_type in enumerate(y_unknown):
+        #     print("segment: {}, class: {}".format(i, NUMBERS_LABELS_MAP[track_type]))
+
+        hist,bins = numpy.histogram(np_image.flatten(),65536,[0,65535])
+        cdf = hist.cumsum()
+        cdf_normalized = cdf * hist.max()/ cdf.max()
+        cdf_m = numpy.ma.masked_equal(cdf,0)
+        cdf_m = (cdf_m - cdf_m.min())*65535/(cdf_m.max()-cdf_m.min())
+        cdf = numpy.ma.filled(cdf_m,0).astype('uint16')
+        img2 = cdf[np_image]
+
+        img2 = img2.astype(numpy.float)
+        img_8bit = 255 - 255*img2/numpy.max(img2)
+        img_8bit = img_8bit.astype(numpy.uint16)
+        img_8bit = img_8bit.astype(numpy.uint8)
+
+        scale_factor = 8
+        upscaled = cv2.resize(img_8bit, dsize=(256*scale_factor, 256*scale_factor), interpolation = cv2.INTER_AREA)
+
+        upscaled = cv2.cvtColor(upscaled, cv2.COLOR_GRAY2BGR)
+
+        for i, segment in enumerate(segments):
+
+            corners = segment.get_metadata(key="corners")
+
+            if (y_unknown[i] >= 2 and y_unknown[i] <= 4) or (y_unknown[i] == 7): # protons/alphas
+                color = (255, 0, 0)
+            elif (y_unknown[i] >= 5 and y_unknown[i] <= 6) or (y_unknown[i] == 9): # electrons
+                color = (255, 255, 0)
+            elif y_unknown[i] == 1: # photons
+                color = (0, 0, 255)
+            else:
+                color = (255, 255, 255)
+
+            cv2.rectangle(upscaled, (scale_factor*(corners[0][1]),scale_factor*(corners[0][0])+1), (scale_factor*(corners[2][1]+1),scale_factor*(corners[2][0]+1)), color, 3)
+
+        image_message = self.bridge.cv2_to_imgmsg(upscaled, encoding="rgb8")
+
+        self.publisher_image.publish(image_message)
 
         # proba = -1*numpy.ones((y_unknown.shape[0], len(POSSIBLE_LABELS[1:])))
         # print("proba: {}".format(proba))
@@ -72,6 +119,8 @@ class Classification:
     def __init__(self):
 
         rospy.init_node('rospix_classification', anonymous=True)
+
+        self.bridge = CvBridge()
 
         self.image = []
 
@@ -84,7 +133,9 @@ class Classification:
         self.image_preprocessor = ImagePreprocessor()
 
         # subscribers
-        rospy.Subscriber("~image_in", Image, self.imageCallback)
+        rospy.Subscriber("~image_in", RospixImage, self.imageCallback)
+
+        self.publisher_image = rospy.Publisher("image_out", Image)
 
         rate = rospy.Rate(10)
 

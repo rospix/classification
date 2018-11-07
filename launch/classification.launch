@@ -1,6 +1,6 @@
 <launch>
 
-  <node name="orientation_grabber" pkg="rospix_classification" type="classification.py" output="screen" respawn="true">
+  <node name="track_classifier" pkg="rospix_classification" type="classification.py" output="screen" respawn="true">
 
     <param name="pipeline_path" value="$(find rospix_classification)/pipeline.joblib" />
 
