@@ -2,7 +2,7 @@
 
   <node name="orientation_grabber" pkg="rospix_classification" type="classification.py" output="screen" respawn="true">
 
-    <param name="pipeline_path" value="$(find rospix_classification)/pipeline.pkl" />
+    <param name="pipeline_path" value="$(find rospix_classification)/pipeline.joblib" />
 
     <!-- subscribed topics -->
     <remap from="~image_in" to="rospix/sensor_0/image" />

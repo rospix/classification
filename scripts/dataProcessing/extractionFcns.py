@@ -222,6 +222,7 @@ def diagonaliness(image):
     selem = np.array([[1,1,0],
                       [1,1,0],
                       [0,0,0]])
+
     small_deleted = binary_opening(bim,selem)
     large_deleted = np.bitwise_xor(bim, small_deleted)
     diagonal_detected = np.bitwise_or(binary_opening(large_deleted, np.array([[1,0,0],
@@ -230,21 +231,22 @@ def diagonaliness(image):
                                       binary_opening(large_deleted, np.array([[0,0,1],
                                                                               [0,1,0],
                                                                               [0,0,0]])))    
-    
+
     return np.sum(diagonal_detected)
 
 def straightness(image):
+
     bim = image > 0
-    
-    
+
     selem = np.array([[1,1,0],
                       [1,1,0],
                       [0,0,0]])
-    small_deleted = binary_opening(bim,selem)
+
+    small_deleted = binary_opening(bim, selem)
     large_deleted = np.bitwise_xor(bim, small_deleted)
     straight_detected = np.bitwise_or(binary_opening(large_deleted, np.array([[1,1,0]])),
                                       binary_opening(large_deleted, np.array([[1],[1],[1]])))    
-    
+
     return np.sum(straight_detected)
 
 def q10(image):

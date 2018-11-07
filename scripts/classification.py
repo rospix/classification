@@ -12,19 +12,26 @@ from dataProcessing.ImagePreprocessor import ImagePreprocessor
 
 from rospix.msg import Image
 from dataManager.DataContainer import BitmapContainer_Image, BitmapContainer_Segment
-from dataManager.DataManager import POSSIBLE_LABELS, FEATURE_NAMES
+from dataManager.DataManager import POSSIBLE_LABELS, FEATURE_NAMES, NUMBERS_LABELS_MAP
 
-import pickle as pkl
+from sklearn.externals import joblib
 
 from sklearn.pipeline import Pipeline
+
+NUMBERS_LABELS_MAP = {-1:'none',
+                      1:'dot',
+                      2:'blob_small',
+                      3:'blob_big',
+                      4:'blob_branched',
+                      5:'track_straight',
+                      6:'track_curly',
+                      7:'drop',
+                      8:'other',
+                      9:'track_lowres'}
 
 class Classification:
 
     def imageCallback(self, data):
-
-        rospy.loginfo('getting images')
-
-        bc = BitmapContainer_Image()
 
         np_image = numpy.zeros((256, 256))
 
@@ -32,32 +39,35 @@ class Classification:
             for j in range(0, 256):
                 np_image[i, j] = data.image[i+255*j]
 
+        # segment the image
         segments = self.image_preprocessor.segmentate_image(np_image)
+
+        if len(segments) == 0:
+            return
+
+        # prepare the numpy matrix for the (segments x features)
+        np_features = numpy.zeros((len(segments), len(FEATURE_NAMES)))
 
         for i,segment in enumerate(segments):
 
-            features = self.feature_extractor.extract_features_direct(segment)
+            # extract the features from the image
+            try:
+                features = self.feature_extractor.extract_features_direct(segment)
+            except:
+                pass
 
-            np_features = numpy.zeros((1, len(features)))
+            # for all feature names, extract copy the features in the correct order
+            for j,feature_name in enumerate(FEATURE_NAMES):
 
-            for i,feature in enumerate(features):
+                np_features[i, j] = features[feature_name]
 
-                np_features[0, i] = features[feature]
-                # print("feature: {}, data: {}".format(feature, features[feature]))
+        y_unknown = self.pipeline.predict(np_features)
 
-            # if i == 0:
+        for i, track_type in enumerate(y_unknown):
+            print("segment: {}, class: {}".format(i, NUMBERS_LABELS_MAP[track_type]))
 
-                # print("segment: {}".format(segment))
-                # print("features: {}".format(features))
-
-            # print("np_features: {}".format(np_features))
-
-            y_unknown = self.pipeline.predict(np_features)
-
-            proba = -1*numpy.ones((y_unknown.shape[0], len(POSSIBLE_LABELS[1:])))
-
-            print("proba: {}".format(proba))
-            print("y_unknown: {}".format(y_unknown))
+        # proba = -1*numpy.ones((y_unknown.shape[0], len(POSSIBLE_LABELS[1:])))
+        # print("proba: {}".format(proba))
 
     def __init__(self):
 
@@ -68,7 +78,7 @@ class Classification:
         # parameters
         self.pipeline_file = rospy.get_param('~pipeline_path', '/')
 
-        self.pipeline = pkl.load(open(self.pipeline_file, 'rb'))
+        self.pipeline = joblib.load(self.pipeline_file) 
 
         self.feature_extractor = FeatureExtractor()
         self.image_preprocessor = ImagePreprocessor()
@@ -81,8 +91,6 @@ class Classification:
         prev_time = rospy.Time.now()
 
         while not rospy.is_shutdown():
-
-            rospy.loginfo_throttle(1.0, 'Spinning')
 
             rate.sleep()
 
