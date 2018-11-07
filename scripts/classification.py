@@ -122,6 +122,7 @@ class Classification:
         # parameters
         self.pipeline_file = rospy.get_param('~pipeline_path', '/')
 
+        # load the sklearn pipeline
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=UserWarning)
             self.pipeline = joblib.load(self.pipeline_file) 
@@ -134,7 +135,7 @@ class Classification:
         rospy.Subscriber("~image_in", RospixImage, self.imageCallback)
 
         # publishers
-        self.publisher_image = rospy.Publisher("image_out", Image, queue_size=1)
+        self.publisher_image = rospy.Publisher("~classified_out", Image, queue_size=1)
 
         rospy.spin()
 

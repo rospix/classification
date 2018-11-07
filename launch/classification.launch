@@ -2,10 +2,13 @@
 
   <node name="track_classifier" pkg="rospix_classification" type="classification.py" output="screen" respawn="true">
 
-    <param name="pipeline_path" value="$(find rospix_classification)/pipeline.joblib" />
+    <param name="pipeline_path" value="$(find rospix_classification)/pipelines/vzlusat-1.joblib" />
 
     <!-- subscribed topics -->
     <remap from="~image_in" to="rospix/sensor_0/image" />
+
+    <!-- published topics -->
+    <remap from="~classified_out" to="~classified_image" />
 
   </node>
 
