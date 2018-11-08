@@ -2,6 +2,7 @@
 
   <node name="track_classifier" pkg="rospix_classification" type="classification.py" output="screen" respawn="true">
 
+    <!-- select the pipeline -->
     <param name="pipeline_path" value="$(find rospix_classification)/pipelines/vzlusat-1.joblib" />
 
     <!-- subscribed topics -->
