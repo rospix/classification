@@ -25,7 +25,7 @@ roslaunch rospix_classification real_time.launch
 ```
 
 ## References
-1. T. Baca, D. Turecek, R. McEntaffer and R. Filgas, **Rospix: Modular Software Tool for Automated Data Acquisitions of Timepix Detectors on Robot Operating System**, _Journal of Instrumentation_, 2018.
+1. T. Baca, D. Turecek, R. McEntaffer and R. Filgas, **[Rospix: Modular Software Tool for Automated Data Acquisitions of Timepix Detectors on Robot Operating System](http://stacks.iop.org/1748-0221/13/i=11/a=C11008)**, _Journal of Instrumentation_ 13(11):C11008, 2018.
 2. M. Jilek, **[Processing of Radiation Data from the Timepix Sensor on the VZLUSAT-1 Satellite](https://dspace.cvut.cz/bitstream/handle/10467/77036/F3-DP-2018-Jilek-Martin-thesis.pdf)**, Master's thesis, Czech Technical University in Prague, Faculty of Electrical Engineering, 2018.
 
 # Acknowledgements
