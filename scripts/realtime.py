@@ -22,6 +22,11 @@ from sklearn.pipeline import Pipeline
 from sensor_msgs.msg import Image
 from rospix.msg import Image as RospixImage
 
+# ROS messages for publishing
+from rospix_classification.msg import Pixel
+from rospix_classification.msg import Cluster
+from rospix_classification.msg import ProcessedImage
+
 # OpenCV + ROS cv_bridgfe
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
@@ -109,6 +114,22 @@ class Classification:
         # publish the image
         self.publisher_image.publish(image_message)
 
+        # publish the processed data
+
+        processed_data = ProcessedImage()
+
+        processed_data.cluster_counts.dot = numpy.count_nonzero(y_unknown == 1)
+        processed_data.cluster_counts.blob_small = numpy.count_nonzero(y_unknown == 2)
+        processed_data.cluster_counts.blob_big = numpy.count_nonzero(y_unknown == 3)
+        processed_data.cluster_counts.blob_branched = numpy.count_nonzero(y_unknown == 4)
+        processed_data.cluster_counts.track_straight = numpy.count_nonzero(y_unknown == 5)
+        processed_data.cluster_counts.track_curly = numpy.count_nonzero(y_unknown == 6)
+        processed_data.cluster_counts.drop = numpy.count_nonzero(y_unknown == 7)
+        processed_data.cluster_counts.other = numpy.count_nonzero(y_unknown == 8)
+        processed_data.cluster_counts.track_lowres = numpy.count_nonzero(y_unknown == 9)
+
+        self.publisher_processed.publish(processed_data)
+
         # proba = -1*numpy.ones((y_unknown.shape[0], len(POSSIBLE_LABELS[1:])))
         # print("proba: {}".format(proba))
 
@@ -132,10 +153,13 @@ class Classification:
         self.image_preprocessor = ImagePreprocessor()
 
         # subscribers
-        rospy.Subscriber("~image_in", RospixImage, self.imageCallback)
+        rospy.Subscriber("~image_in", RospixImage, self.imageCallback, queue_size=1)
 
         # publishers
-        self.publisher_image = rospy.Publisher("~classified_out", Image, queue_size=1)
+        self.publisher_image = rospy.Publisher("~labeled_out", Image, queue_size=1)
+
+        # publisher for the classification metadata
+        self.publisher_processed = rospy.Publisher("~data", ProcessedImage, queue_size=1)
 
         rospy.spin()
 

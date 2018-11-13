@@ -15,14 +15,34 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   message_generation
   geometry_msgs
+  sensor_msgs
   nodelet
   rospix
+  cmake_modules
 )
+
+# messages for MPC_TRACKER
+add_message_files(DIRECTORY msg FILES
+
+  Pixel.msg
+  Cluster.msg
+  ClusterClass.msg
+  ClusterCounts.msg
+  ProcessedImage.msg
+  )
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(DEPENDENCIES
+
+  std_msgs
+  geometry_msgs
+  sensor_msgs
+  )
 
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES gdax_interface
-   CATKIN_DEPENDS nodelet rospy std_msgs rospix
+   CATKIN_DEPENDS nodelet rospy std_msgs rospix message_runtime
    DEPENDS message_runtime
 )
 

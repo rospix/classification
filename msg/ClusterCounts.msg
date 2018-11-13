@@ -1,0 +1,9 @@
+uint32 dot
+uint32 blob_small
+uint32 blob_big
+uint32 blob_branched
+uint32 track_straight
+uint32 track_curly
+uint32 drop
+uint32 other
+uint32 track_lowres
