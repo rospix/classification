@@ -1,3 +1,5 @@
+string name
+uint8 cluster_class
 uint8 DOT=1
 uint8 BLOB_SMALL=2
 uint8 BLOB_BIG=3
