@@ -15,7 +15,7 @@ To run the Python code, following python packages are required:
 * **scikit-image** for image feature extraction
 * **sklearn** 0.20.0 for machine learning and classification
 ```bash
-sudo pip3 install scikit-image sklearn
+sudo pip install scikit-image sklearn
 ```
 
 ## Real time classification

@@ -1,0 +1,8 @@
+source_path: "/home/klaxalk/timepix_data/in"
+result_path: "/home/klaxalk/timepix_data/out"
+
+# delimiter for data on the input
+delimiter: ','
+
+# line endings for the output: Linux: \n, Windows: \n\r
+line_ending: "\n"
