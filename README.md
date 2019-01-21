@@ -24,6 +24,26 @@ sudo pip install scikit-image sklearn
 roslaunch rospix_classification real_time.launch
 ```
 
+## Batch mode
+
+In the batch mode, the ROS node takes CSV files in a given folder and processed them sequentially.
+The results, containing the statistics for each image and a list of clusters, are saved in JSON format.
+
+The **input** and the **output** folders are set in the config file ```config/batch_processing.yaml```.
+
+```yaml
+source_path: "/home/klaxalk/timepix_data/in"
+result_path: "/home/klaxalk/timepix_data/out"
+
+# delimiter for data on the input
+input_delimiter: ','
+```
+
+To run the batch processing, issue the command:
+```bash
+roslaunch rospix_classification batch.launch
+```
+
 ## References
 1. T. Baca, D. Turecek, R. McEntaffer and R. Filgas, **[Rospix: Modular Software Tool for Automated Data Acquisitions of Timepix Detectors on Robot Operating System](http://stacks.iop.org/1748-0221/13/i=11/a=C11008)**, _Journal of Instrumentation_ 13(11):C11008, 2018.
 2. M. Jilek, **[Processing of Radiation Data from the Timepix Sensor on the VZLUSAT-1 Satellite](https://dspace.cvut.cz/bitstream/handle/10467/77036/F3-DP-2018-Jilek-Martin-thesis.pdf)**, Master's thesis, Czech Technical University in Prague, Faculty of Electrical Engineering, 2018.
