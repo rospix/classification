@@ -166,8 +166,8 @@ class Classification:
 
                 # copy the corner coordinate (left-upper)
                 corners = segment.get_metadata(key="corners")
-                new_cluster.lu_x = corners[0, 0]
-                new_cluster.lu_y = corners[0, 1]
+                new_cluster.pos_x = corners[0, 0]
+                new_cluster.pos_y = corners[0, 1]
 
                 # copy the cluster cluster class and name
                 new_cluster.cluster_class.cluster_class = y_unknown[i]

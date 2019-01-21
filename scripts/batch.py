@@ -8,6 +8,7 @@ import sys
 import numpy
 import warnings
 import re
+import platform
 
 import json
 import yaml
@@ -64,8 +65,12 @@ class Classification:
         self.pipeline_file = rospy.get_param('~pipeline_path', '/')
         self.source_path = rospy.get_param('~source_path', '/')
         self.result_path = rospy.get_param('~result_path', '/')
-        self.delimiter = rospy.get_param('~delimiter', '/')
-        self.new_line = rospy.get_param('~new_line', '/')
+        self.delimiter = rospy.get_param('~input_delimiter', '/')
+
+        if platform.system() == "Windows":
+            self.new_line = "\n\r" 
+        else:
+            self.new_line = "\n" 
 
         # load the sklearn pipeline
         with warnings.catch_warnings():
@@ -157,8 +162,8 @@ class Classification:
 
                         # copy the corner coordinate (left-upper)
                         corners = segment.get_metadata(key="corners")
-                        new_cluster.lu_x = corners[0, 0]
-                        new_cluster.lu_y = corners[0, 1]
+                        new_cluster.pos_x = corners[0, 0]
+                        new_cluster.pos_y = corners[0, 1]
 
                         # copy the cluster cluster class and name
                         new_cluster.cluster_class.cluster_class = y_unknown[i]
