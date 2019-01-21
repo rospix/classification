@@ -20,13 +20,36 @@ sudo pip install scikit-image sklearn
 
 ## Real time classification
 
+Coordinates of each cluster are relative to its top-left corner, the coordinates within the cluster are then relative to its position.
+
 ```bash
 roslaunch rospix_classification real_time.launch
+```
+### Subscribed topics
+
+The rospix output:
+```
+/track_classifier/image_in
+```
+
+### Published topics
+
+The ROS image (possible to view using, e.g., rqt_image_view) showing labeled clusters:
+```
+/track_classifier/labeled_image
+```
+
+The classified data per each image:
+```
+/track_classifier/data
 ```
 
 ## Batch mode
 
 In the batch mode, the ROS node takes CSV files in a given folder and processed them sequentially.
+The node expects 1 image per input file.
+As a results, it outputs two files per image, the 1st one containing overall image statistics, the 2nd one containing a cluster list.
+Coordinates of each cluster are relative to its top-left corner, the coordinates within the cluster are then relative to its position.
 The results, containing the statistics for each image and a list of clusters, are saved in JSON format.
 
 The **input** and the **output** folders are set in the config file ```config/batch_processing.yaml```.
