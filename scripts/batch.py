@@ -9,6 +9,9 @@ import numpy
 import warnings
 import re
 
+import json
+import yaml
+
 # from dataManager.DataContainer import BitmapContainer_Image, BitmapContainer_Segment
 from dataManager.DataManager import POSSIBLE_LABELS, FEATURE_NAMES, NUMBERS_LABELS_MAP
 
@@ -23,6 +26,11 @@ from sklearn.pipeline import Pipeline
 from rospix_classification.msg import Pixel
 from rospix_classification.msg import Cluster
 from rospix_classification.msg import ProcessedImage
+
+def msg2json(msg):
+   ''' Convert a ROS message to JSON format'''
+   y = yaml.load(str(msg))
+   return json.dumps(y, indent=2)
 
 class Classification:
 
@@ -46,16 +54,6 @@ class Classification:
     
     # #} end of loadImage()
 
-   # #{ numericalSort()
-   
-    def numericalSort(self, value):
-
-        parts = self.numbers.split(value)
-        parts[1::2] = map(int, parts[1::2])
-    
-   
-   # #} end of numericalSort()    return parts
-
     def __init__(self):
 
         rospy.init_node('rospix_classification', anonymous=True)
@@ -67,7 +65,7 @@ class Classification:
         self.source_path = rospy.get_param('~source_path', '/')
         self.result_path = rospy.get_param('~result_path', '/')
         self.delimiter = rospy.get_param('~delimiter', '/')
-        self.line_ending = rospy.get_param('~line_ending', '/')
+        self.new_line = rospy.get_param('~new_line', '/')
 
         # load the sklearn pipeline
         with warnings.catch_warnings():
@@ -79,8 +77,8 @@ class Classification:
         self.image_preprocessor = ImagePreprocessor()
 
         # load the files
-        file_names = os.listdir(self.source_path)
-        file_names = sorted(file_names, key=self.numericalSort)
+        file_names_unsorted = os.listdir(self.source_path)
+        file_names = sorted(file_names_unsorted, key=lambda x: int(os.path.splitext(x)[0]))
 
         # for all images
         for i,filename in enumerate(file_names):
@@ -127,11 +125,12 @@ class Classification:
             # create the output file and the image cluester statistics
             with open(self.result_path+"/"+filename+".statistics.txt", "w") as outfile:
 
-                for i in range(0, 10):
-                    outfile.write("{}: {}{}".format(POSSIBLE_LABELS[i], numpy.count_nonzero(y_unknown == i), self.line_ending))
+                outfile.write(msg2json(processed_data.cluster_counts))
 
             # create the output file and the cluster list
             with open(self.result_path+"/"+filename+".clusters.txt", "w") as outfile:
+
+                outfile.write("[{}".format(self.new_line))
 
                 # if the image is not empty, fill the "data" msg
                 if not image_empty:
@@ -166,6 +165,18 @@ class Classification:
                         new_cluster.cluster_class.name = POSSIBLE_LABELS[y_unknown[i]]
 
                         processed_data.cluster_list.append(new_cluster);
+
+                        outfile.write(msg2json(new_cluster))
+
+                        if i < (len(segments)-1):
+
+                            outfile.write(",{}".format(self.new_line))
+
+                        else:
+
+                            outfile.write("{}".format(self.new_line))
+
+                outfile.write("]")
 
                 proba = -1*numpy.ones((y_unknown.shape[0], len(POSSIBLE_LABELS[1:])))
 

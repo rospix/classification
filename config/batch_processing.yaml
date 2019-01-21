@@ -5,4 +5,4 @@ result_path: "/home/klaxalk/timepix_data/out"
 delimiter: ','
 
 # line endings for the output: Linux: \n, Windows: \n\r
-line_ending: "\n"
+new_line: "\n"
