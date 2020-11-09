@@ -47,16 +47,20 @@ The classified data per each image:
 ## Batch mode
 
 In the batch mode, the ROS node takes CSV files in a given folder and processed them sequentially.
-The node expects 1 image per input file.
-As a results, it outputs two files per image, the 1st one containing overall image statistics, the 2nd one containing a cluster list.
+The node expects 1 image per input file, and the filenames in the format ``filenamename.extension``.
+
+As results, it outputs two files per image, the 1st one containing overall image statistics, the 2nd one containing a cluster list.
 Coordinates of each cluster are relative to its top-left corner, the coordinates within the cluster are then relative to its position.
 The results, containing the statistics for each image and a list of clusters, are saved in JSON format.
 
 The **input** and the **output** folders are set in the config file ```config/batch_processing.yaml```.
 
 ```yaml
-source_path: "/home/klaxalk/timepix_data/in"
-result_path: "/home/klaxalk/timepix_data/out"
+# path will be relative to this package root folder
+path_relative: True # use False if you plan on providing absolute filepaths
+source_path: "datasets/in"
+result_path: "datasets/out"
+classifier_pipeline_path: "pipelines/vzlusat-1.joblib"
 
 # delimiter for data on the input
 input_delimiter: ','

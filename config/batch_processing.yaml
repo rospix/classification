@@ -1,5 +1,8 @@
-source_path: "/home/klaxalk/timepix_data/in"
-result_path: "/home/klaxalk/timepix_data/out"
+# path will be relative to this package root folder
+path_relative: True # use False when providing absolute filepaths
+source_path: "datasets/set01in"
+result_path: "datasets/set01out"
+classifier_pipeline_path: "pipelines/vzlusat-1.joblib"
 
 # delimiter for data on the input
-input_delimiter: ','
+input_delimiter: ' '

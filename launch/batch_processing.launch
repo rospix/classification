@@ -2,9 +2,6 @@
 
   <node name="track_classifier" pkg="rospix_classification" type="batch.py" output="screen">
 
-    <!-- select the pipeline -->
-    <param name="pipeline_path" value="$(find rospix_classification)/pipelines/vzlusat-1.joblib" />
-
     <rosparam file="$(find rospix_classification)/config/batch_processing.yaml" />
 
   </node>
