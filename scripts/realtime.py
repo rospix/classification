@@ -23,9 +23,9 @@ from sensor_msgs.msg import Image
 from rospix.msg import Image as RospixImage
 
 # ROS messages for publishing
-from rospix_classification.msg import Pixel
-from rospix_classification.msg import Cluster
-from rospix_classification.msg import ProcessedImage
+from classification.msg import Pixel
+from classification.msg import Cluster
+from classification.msg import ProcessedImage
 
 # OpenCV + ROS cv_bridge
 import cv2
@@ -182,7 +182,7 @@ class Classification:
 
     def __init__(self):
 
-        rospy.init_node('rospix_classification', anonymous=True)
+        rospy.init_node('classification', anonymous=True)
 
         # initialize the ROS cv_bridge
         self.bridge = CvBridge()

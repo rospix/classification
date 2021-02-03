@@ -23,7 +23,7 @@ sudo pip install scikit-image sklearn
 Coordinates of each cluster are relative to its top-left corner, the coordinates within the cluster are then relative to its position.
 
 ```bash
-roslaunch rospix_classification real_time.launch
+roslaunch classification real_time.launch
 ```
 ### Subscribed topics
 
@@ -68,7 +68,7 @@ input_delimiter: ','
 
 To run the batch processing, issue the command:
 ```bash
-roslaunch rospix_classification batch.launch
+roslaunch classification batch.launch
 ```
 
 ## References

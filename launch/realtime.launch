@@ -1,9 +1,9 @@
 <launch>
 
-  <node name="track_classifier" pkg="rospix_classification" type="realtime.py" output="screen" respawn="true">
+  <node name="track_classifier" pkg="classification" type="realtime.py" output="screen" respawn="true">
 
     <!-- select the pipeline -->
-    <param name="pipeline_path" value="$(find rospix_classification)/pipelines/vzlusat-1.joblib" />
+    <param name="pipeline_path" value="$(find classification)/pipelines/vzlusat-1.joblib" />
 
     <!-- subscribed topics -->
     <remap from="~image_in" to="rospix/sensor_0/image" />
