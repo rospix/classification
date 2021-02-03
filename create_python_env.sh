@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# get the path to this script
+MY_PATH=`dirname "$0"`
+MY_PATH=`( cd "$MY_PATH" && pwd )`
+cd "$MY_PATH"
+
 # install python3-venv
 sudo apt-get -y install python3-venv
 

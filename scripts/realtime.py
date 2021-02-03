@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/bin/sh
+"exec" "`dirname $0`/python-env/bin/python3" "$0" "$@"
 
 import rospy
 import tf
