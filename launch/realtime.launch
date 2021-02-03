@@ -3,7 +3,7 @@
   <node name="track_classifier" pkg="classification" type="realtime.py" output="screen" respawn="true">
 
     <!-- select the pipeline -->
-    <param name="pipeline_path" value="$(find classification)/pipelines/vzlusat-1.joblib" />
+    <param name="pipeline_path" value="$(find classification)/pipelines/vzlusat-1.joblib_p3" />
 
     <!-- subscribed topics -->
     <remap from="~image_in" to="rospix/sensor_0/image" />

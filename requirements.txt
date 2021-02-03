@@ -5,3 +5,4 @@ scikit-image
 joblib==1.0.0
 sklearn
 numpy==1.17.4
+opencv-python

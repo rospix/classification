@@ -6,16 +6,9 @@ A ROS node for basic morphologic track classification.
 
 ## Dependencies
 
-To download the repository install **git** with **lfs*:
+To run the Python code, install the virtual environment by running:
 ```bash
-sudo apt install git git-lfs
-```
-
-To run the Python code, following python packages are required:
-* **scikit-image** for image feature extraction
-* **sklearn** 0.20.0 for machine learning and classification
-```bash
-pip3 install scikit-image sklearn
+./create_python_env.sh
 ```
 
 ## Real time classification
