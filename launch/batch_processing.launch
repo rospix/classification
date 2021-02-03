@@ -1,8 +1,8 @@
 <launch>
 
-  <node name="track_classifier" pkg="rospix_classification" type="batch.py" output="screen">
+  <node name="track_classifier" pkg="classification" type="batch.py" output="screen">
 
-    <rosparam file="$(find rospix_classification)/config/batch_processing.yaml" />
+    <rosparam file="$(find classification)/config/batch_processing.yaml" />
 
   </node>
 

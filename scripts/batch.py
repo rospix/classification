@@ -25,12 +25,11 @@ from dataProcessing.ImagePreprocessor import ImagePreprocessor
 from sklearn.externals import joblib
 from sklearn.pipeline import Pipeline
 
-from rospix_classification.msg import Pixel
-from rospix_classification.msg import Cluster
-from rospix_classification.msg import ProcessedImage
+from classification.msg import Pixel
+from classification.msg import Cluster
+from classification.msg import ProcessedImage
 
-NODE_NAME = 'rospix_classification'
-
+NODE_NAME = 'classification'
 
 def msg2json(msg):
    ''' Convert a ROS message to JSON format'''
@@ -42,7 +41,7 @@ class Classification:
     # #{ loadImage()
     def loadImage(self, filename):
         image = numpy.zeros(shape=[256, 256])
-        
+
         with open(filename, 'r') as csvfile:
             csvreader = csv.reader(csvfile, delimiter=' ')
             for i,row in enumerate(csvreader):
@@ -64,13 +63,13 @@ class Classification:
         self.source_path = rospy.get_param('~source_path', '/')
         self.result_path = rospy.get_param('~result_path', '/')
         self.delimiter = rospy.get_param('~input_delimiter', '/')
-        
+
         if self.path_relative:
             rospack = rospkg.RosPack()
             self.pipeline_path = rospack.get_path(NODE_NAME) + '/' + self.pipeline_path
             self.source_path = rospack.get_path(NODE_NAME) + '/' + self.source_path
             self.result_path = rospack.get_path(NODE_NAME) + '/' + self.result_path
-        
+
         # #{ check file existence
         if os.path.isfile(self.pipeline_path):
             rospy.loginfo('Pipeline filepath appears valid')
@@ -92,7 +91,7 @@ class Classification:
         # #}
 
         if platform.system() == 'Windows':
-            self.new_line = '\n\r' 
+            self.new_line = '\n\r'
         else:
             self.new_line = '\n'
 
@@ -118,8 +117,8 @@ class Classification:
         # #{ process the images
         for n, filename in enumerate(file_names):
             filename_separated = filename.split('.')
-            
-            # skip metadata and other non-image files 
+
+            # skip metadata and other non-image files
             if len(filename_separated) != 2:
                 continue
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1.2)
-project(rospix_classification)
+project(classification)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -11,10 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   geometry_msgs
   sensor_msgs
-  nodelet
   rospix
   cmake_modules
-)
+  )
 
 add_message_files(DIRECTORY msg FILES
 
@@ -33,9 +32,11 @@ generate_messages(DEPENDENCIES
   )
 
 catkin_package(
-#  INCLUDE_DIRS include
-   CATKIN_DEPENDS nodelet rospy std_msgs rospix message_runtime
-   DEPENDS message_runtime
-)
+  # INCLUDE_DIRS include
+  CATKIN_DEPENDS rospy std_msgs rospix message_runtime
+  DEPENDS message_runtime
+  )
 
-include_directories(${catkin_INCLUDE_DIRS})
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+  )
