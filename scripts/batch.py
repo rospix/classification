@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os
 import rospy
@@ -22,7 +22,7 @@ from dataProcessing.FeatureExtractor import FeatureExtractor
 from dataProcessing.ImagePreprocessor import ImagePreprocessor
 
 # classifier
-from sklearn.externals import joblib
+import joblib
 from sklearn.pipeline import Pipeline
 
 from classification.msg import Pixel
@@ -103,6 +103,7 @@ class Classification:
             except:
                 rospy.logerr('Invalid processing pipeline provided with filepath \'%s\'', self.pipeline_path)
                 return
+
 
         rospy.loginfo('Processing pipeline loaded correctly')
         # #}

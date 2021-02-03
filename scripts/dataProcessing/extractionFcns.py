@@ -60,7 +60,7 @@ def nr_crossings(image, method="graph"):
             #    nx.draw(G, p, with_labels=True)
             #    nx.draw_networkx_edge_labels(G, pos=p)
             #    plt.show()
-            #    print im_skeleton
+            #    print(im_skeleton)
         else:
             crossings = 0
     else:
@@ -77,9 +77,9 @@ def nr_crossings(image, method="graph"):
                         crossings = crossings+1
                         cr_list.append((row, col))
     #if crossings > 0:
-    #    print "******"
-    #    print im_skeleton
-    #    print "Crossings detected: ", crossings
+    #    print("******")
+    #    print(im_skeleton)
+    #    print("Crossings detected: ", crossings)
     return crossings
 
 def fractal_dimension(image):
@@ -97,7 +97,7 @@ def skeleton(image):
 def chull_area(image):
     #print(image)
     #im = np.copy(image)
-    #print im
+    #print(im)
     #im[im > 0] = 1
     hull = convex_hull_image(image>0)
     return np.count_nonzero(hull)
@@ -169,8 +169,8 @@ def tortuosity(image):
     start = list(spt.nodes())[0]
     if len(spt.nodes()) <= 1:
         return 0.0
-    #print start
-    #print image
+    #print(start)
+    #print(image)
     #print(sk)
     #print(list(nx.bfs_edges(spt, start)))
     u = list(nx.bfs_edges(spt, start))[-1][-1]
@@ -202,7 +202,7 @@ def eig_ratio(image):
 
 
 def boxiness(image):
-    bim = image > 0   
+    bim = image > 0
     bim0 = np.zeros(bim.shape)
     bim1 = np.zeros(bim.shape)
     bim1 = bim
@@ -230,7 +230,7 @@ def diagonaliness(image):
                                                                 [0,0,0]])),
                                       binary_opening(large_deleted, np.array([[0,0,1],
                                                                               [0,1,0],
-                                                                              [0,0,0]])))    
+                                                                              [0,0,0]])))
 
     return np.sum(diagonal_detected)
 
@@ -245,7 +245,7 @@ def straightness(image):
     small_deleted = binary_opening(bim, selem)
     large_deleted = np.bitwise_xor(bim, small_deleted)
     straight_detected = np.bitwise_or(binary_opening(large_deleted, np.array([[1,1,0]])),
-                                      binary_opening(large_deleted, np.array([[1],[1],[1]])))    
+                                      binary_opening(large_deleted, np.array([[1],[1],[1]])))
 
     return np.sum(straight_detected)
 
@@ -272,9 +272,9 @@ def e1(image):
     ses2 = [[[0,0,0],[0,0,1],[0,0,0]],
            [[0,0,0],[0,0,0],[0,1,0]],
            [[0,0,0],[1,0,0],[0,0,0]],
-           [[0,1,0],[0,0,0],[0,0,0]]]    
+           [[0,1,0],[0,0,0],[0,0,0]]]
     for i,se in enumerate(ses):
-        e1 = np.bitwise_or(e1, hmtransform(bim, se, ses2[i]))    
+        e1 = np.bitwise_or(e1, hmtransform(bim, se, ses2[i]))
     # detect pixels connected with background with two edges
     ses = [[[1,1,1],
             [1,1,0],
@@ -299,7 +299,7 @@ def e1(image):
 
 def e2(image):
     bim = image>0
-    e2 = np.zeros(image.shape).astype(dtype='bool')  
+    e2 = np.zeros(image.shape).astype(dtype='bool')
     # detect pixels connected with background with two edges
     ses = [[[0,1,0],
             [1,1,0],
@@ -336,14 +336,14 @@ def e2(image):
             [0,0,0]],
            [[0,1,0],
             [0,0,0],
-            [0,1,0]]]    
+            [0,1,0]]]
     for i,se in enumerate(ses):
-        e2 = np.bitwise_or(e2, hmtransform(bim, se, ses2[i]))       
+        e2 = np.bitwise_or(e2, hmtransform(bim, se, ses2[i]))
     return np.sum(e2)
 
 def e3(image):
     bim = image>0
-    e3 = np.zeros(image.shape).astype(dtype='bool')     
+    e3 = np.zeros(image.shape).astype(dtype='bool')
     # detect pixels connected with three edges
     ses = [[[0,1,0],
                 [0,1,0],
@@ -368,23 +368,23 @@ def e3(image):
                 [0,0,0]],
                [[0,1,0],
                 [1,0,0],
-                [0,1,0]]]    
+                [0,1,0]]]
     for i,se in enumerate(ses):
-        e3 = np.bitwise_or(e3, hmtransform(bim, se, ses2[i]))           
+        e3 = np.bitwise_or(e3, hmtransform(bim, se, ses2[i]))
     return np.sum(e3)
 
 def e4(image):
     bim = image>0
-    e4 = np.zeros(image.shape).astype(dtype='bool')     
+    e4 = np.zeros(image.shape).astype(dtype='bool')
     # pixels with four edges
     ses = [[[0,0,0],
             [0,1,0],
             [0,0,0]]]
     ses2 = [[[0,1,0],
             [1,0,1],
-            [0,1,0]]]    
+            [0,1,0]]]
     for i,se in enumerate(ses):
-        e4 = np.bitwise_or(e4, hmtransform(bim, se, ses2[i]))         
+        e4 = np.bitwise_or(e4, hmtransform(bim, se, ses2[i]))
     return np.sum(e4)
 
 def bheigth(image):
@@ -396,9 +396,9 @@ def bwidth(image):
 def hmtransform(bim, se1, se2):
     im2 = np.zeros((bim.shape[0]+2, bim.shape[1]+2)).astype(dtype='bool')
     im2[1:bim.shape[0]+1, 1:bim.shape[1]+1]=bim
-    im2 = np.bitwise_and(binary_erosion(im2, selem=np.array(se1).astype(dtype='bool')), 
-                   binary_erosion(np.bitwise_not(im2), 
-                                  selem=np.array(se2).astype(dtype='bool')))    
+    im2 = np.bitwise_and(binary_erosion(im2, selem=np.array(se1).astype(dtype='bool')),
+                   binary_erosion(np.bitwise_not(im2),
+                                  selem=np.array(se2).astype(dtype='bool')))
     return im2[1:-1, 1:-1]
 
 
@@ -442,9 +442,9 @@ def bin2graph(image, rc_penalty=1, diagonal_penalty=2, edge_length=1):
     # Get coordinates of all nonzero points
     for row in range(0, rows):
         for col in range(0, cols):
-            #print "Testing ", (row, col), image[row, col]
+            #print("Testing ", (row, col), image[row, col])
             if image[row, col] == True:
-                #print (row, col), " is True"
+                #print((row, col), " is True")
                 nonzero.add((row, col))
                 G.add_node((row, col))
 
@@ -462,11 +462,11 @@ def bin2graph(image, rc_penalty=1, diagonal_penalty=2, edge_length=1):
                      ((row+1, col),rc_penalty),
                      ((row+1, col+1),diagonal_penalty)]
         for neighbor in neighbors:
-            #print 'Testing ',s, " with ", neighbor
+            #print('Testing ',s, " with ", neighbor)
             if neighbor[0] in nonzero:
-                #print neighbor[0]
+                #print(neighbor[0])
                 G.add_edge(s, neighbor[0], weight=neighbor[1], length=edge_length)
-                #print s, ' connected with ', neighbor
+                #print(s, ' connected with ', neighbor)
     G=G.to_undirected()
     return G
 
@@ -478,8 +478,8 @@ if __name__ == "__main__":
     im_blob = np.array([[1,1,0,0,1],
                         [1,1,1,1,1],
                         [1,0,1,0,0],
-                        [1,0,0,1,0]])   
-    
+                        [1,0,0,1,0]])
+
     selem = np.array([[1,1,0],
                       [1,1,0],
                       [0,0,0]])
@@ -488,13 +488,13 @@ if __name__ == "__main__":
     diagonal_detected = binary_opening(large_deleted, np.array([[1,0,0],
                                                                 [0,1,0],
                                                                 [0,0,0]]))
-    print diagonal_detected
-    
+    print(diagonal_detected)
+
     print(boxiness(im_blob))
-    print diagonaliness(im_blob)
-    print straightness(im_blob)
+    print(diagonaliness(im_blob))
+    print(straightness(im_blob))
     im_blob = np.array([[1,1,1],[0,1,0],[0,1,0],[0,0,1]])
-    print e1(im_blob)
-    print e2(im_blob)
-    print e3(im_blob)
-    print e4(im_blob)
+    print(e1(im_blob))
+    print(e2(im_blob))
+    print(e3(im_blob))
+    print(e4(im_blob))

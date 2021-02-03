@@ -43,7 +43,7 @@ class ImagePreprocessor():
                 segment.set_metadata(key='parent_im_id',
                                      data=image_dataframe.get_metadata(key='id'))
                 all_segments.append(segment)
-            #print "Image ", i+1,"/",len(images_collection), "processed."
+            # print("Image(",(i+1,"/",len(images_collection),("processed."))
         return all_segments
 
 
@@ -133,7 +133,7 @@ class ImagePreprocessor():
         :param T:
         :return: 2D numpy array
         '''
-        print "ImagePreprocessor.calibrate(): Not implemented"
+        print("ImagePreprocessor.calibrate(): Not implemented")
         #return (T*image+B-C)/(image-A)
         return image
 

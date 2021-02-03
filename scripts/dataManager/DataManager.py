@@ -6,25 +6,24 @@ import sqlite3 as sq
 from os import listdir
 import numpy as np
 
-from DataContainer import BitmapContainer_Image, BitmapContainer_Segment, HistogramContainer
+from dataManager.DataContainer import BitmapContainer_Image, BitmapContainer_Segment, HistogramContainer
 
 FEATURE_NAMES = ['area', 'energy', 'nr_crossings', 'chull_area', 'pixel_energy',
                  'chull_occupancy', 'linear_fit', 'skeleton_chull_ratio',
                  'pixels_direction', 'tortuosity', 'eig_ratio', 'dist_mean', 'dist_std',
-                 'boxiness', 
-                 'diagonaliness', 'straightness', 
+                 'boxiness',
+                 'diagonaliness', 'straightness',
                  'q10', 'q50', 'q90',
                  'e1', 'e2', 'e3', 'e4',
                  'bheigth', 'bwidth']
 
 FEATURE_TYPES = ['INT', 'FLOAT', 'INT', 'INT', 'FLOAT', 'FLOAT',
-                 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 
+                 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT',
                  'INT',
-                 'INT','INT', 
-                 'FLOAT', 'FLOAT', 'FLOAT', 
+                 'INT','INT',
+                 'FLOAT', 'FLOAT', 'FLOAT',
                  'INT', 'INT', 'INT', 'INT',
                  'INT', 'INT']
-
 
 LABELS_NUMBERS_MAP = {'none':-1,
                       'dot':1,
@@ -59,7 +58,6 @@ POSSIBLE_LABELS = ['none',
                    'drop',
                    'other',
                    'track_lowres']
-
 
 class DataManager_sql_2():
     def __init__(self, db_name, im_folder):
@@ -162,7 +160,7 @@ class DataManager_sql_2():
         '\n'      + \
         'Nr labeled (track_lowres): ' + \
         str(self.cursor.execute('SELECT COUNT(*) FROM tbl_segments WHERE label_shape_desired = 9').fetchone()[0]) + \
-        '\n'         
+        '\n'
         return s
 
     def get_image_ids(self, filter='fullres'):
@@ -191,7 +189,7 @@ class DataManager_sql_2():
             ids_2D = self.cursor.execute(query).fetchall()
         ids = [element for tupl in ids_2D for element in tupl]
         return ids
-    
+
     def get_histograms(self, im_ids):
         '''
         Get histograms with specified ids.
@@ -207,7 +205,7 @@ class DataManager_sql_2():
             if histogram_path == None:
                 mask[i] = -1
                 continue
-            else:   
+            else:
                 histogram_path = self.folder+'/'+histogram_path[0]
                 hist = pkl.load(open(histogram_path, 'rb'))
                 h = HistogramContainer()
@@ -237,7 +235,7 @@ class DataManager_sql_2():
         ids2_2D = self.cursor.execute(query2).fetchall()
         ids2 = [element for tupl in ids2_2D for element in tupl]
         return ids1, ids2
-    
+
 
     def get_custom_column(self, query):
         '''
@@ -318,7 +316,7 @@ class DataManager_sql_2():
                     bc.set_metadata(key='name', data=path)
                     images.append(bc)
                 except IOError:
-                    print 'DataManager.get_images: file ', self.folder+'/'+path, ' not found. Skipping.'
+                    print('DataManager.get_images: file ', self.folder+'/'+path, ' not found. Skipping.')
         return images
 
     def get_segment_corners(self, ids):
@@ -639,7 +637,7 @@ class DataManager_sql_2():
                 self.cursor.execute(query, (id, cl))
                 counts[i, j] = self.cursor.fetchone()[0]
         return counts
-    
+
     def get_geo_data(self, im_ids):
         '''
         :param im_ids: ids of images

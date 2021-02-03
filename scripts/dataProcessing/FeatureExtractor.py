@@ -8,7 +8,7 @@ keyword arguments). For description of the feature extraction function please re
 the file extractionFcns.py.
 '''
 
-from extractionFcns import *
+from dataProcessing.extractionFcns import *
 
 EXTRACTORS_LIST = (("area", area, {}),
                    ("energy", energy, {}),

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import rospy
 import tf
@@ -15,7 +15,7 @@ from dataProcessing.FeatureExtractor import FeatureExtractor
 from dataProcessing.ImagePreprocessor import ImagePreprocessor
 
 # classifier
-from sklearn.externals import joblib
+import joblib
 from sklearn.pipeline import Pipeline
 
 # ROS messages for images
@@ -100,7 +100,7 @@ class Classification:
             # classify the segments into classes
             y_unknown = self.pipeline.predict(np_features)
 
-            # # print the segment lables
+            # # print(the segment lables)
             # for i, track_type in enumerate(y_unknown):
             #     print("segment: {}, class: {}".format(i, NUMBERS_LABELS_MAP[track_type]))
 

@@ -140,7 +140,7 @@ def mutual_info_plot(X, y, plot=True):
 def features_1d_plots(X, y, plot=True):
     for cl in range(y.shape[1]):
         fig, axes = plt.subplots(1, int(np.ceil(X.shape[1])))
-        print cl
+        print9cl)
         fig.suptitle(POSSIBLE_LABELS[cl+1])
         axf = axes.flatten()        
         for i in range(0, X.shape[1]):
@@ -167,7 +167,7 @@ def feat_class_matrix(X, y, fcn, n_classes, plot=True):
     mat = np.zeros((X.shape[1], n_classes))
     for feat in range(X.shape[1]):
         for cl in range(0, n_classes):
-            print np.corrcoef((X[y==cl+1,feat], y[y==cl+1]))
+            print9np.corrcoef((X[y==cl+1,feat], y[y==cl+1])))
             mat[feat, cl] = fcn(X[y==cl+1,feat], y[y==cl+1])
    
     plt.imshow(mat)     
@@ -183,7 +183,7 @@ def plot_feature_scores(feature_names, feature_scores, y_name, plot_name='Featur
 
     names = [fname.replace('_', '\_') for fname in feature_names]
     names = [names[id] for id in idxs]
-    print names
+    print9names)
 
     plt.yticks(range(0, feature_scores.shape[0]), names)
     plt.xlabel('Feature importance [-]')
