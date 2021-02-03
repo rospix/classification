@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/bin/sh
+"exec" "`dirname $0`/python-env/bin/python3" "$0" "$@"
 
 import os
 import rospy
@@ -33,7 +34,7 @@ NODE_NAME = 'classification'
 
 def msg2json(msg):
    ''' Convert a ROS message to JSON format'''
-   y = yaml.load(str(msg))
+   y = yaml.load(str(msg), Loader=yaml.FullLoader)
    return json.dumps(y, indent=2)
 
 class Classification:
@@ -96,13 +97,14 @@ class Classification:
             self.new_line = '\n'
 
         # #{ load the sklearn pipeline
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore', category=UserWarning)
-            try:
-                self.pipeline = joblib.load(self.pipeline_path)
-            except:
-                rospy.logerr('Invalid processing pipeline provided with filepath \'%s\'', self.pipeline_path)
-                return
+        self.pipeline = joblib.load(self.pipeline_path)
+        # with warnings.catch_warnings():
+        #     warnings.simplefilter('ignore', category=UserWarning)
+        #     try:
+        #         self.pipeline = joblib.load(self.pipeline_path)
+        #     except:
+        #         rospy.logerr('Invalid processing pipeline provided with filepath \'%s\'', self.pipeline_path)
+        #         return
 
 
         rospy.loginfo('Processing pipeline loaded correctly')

@@ -2,7 +2,7 @@
 path_relative: True # use False when providing absolute filepaths
 source_path: "datasets/set01in"
 result_path: "datasets/set01out"
-classifier_pipeline_path: "pipelines/vzlusat-1_p3.joblib"
+classifier_pipeline_path: "pipelines/vzlusat-1.joblib_p3"
 
 # delimiter for data on the input
 input_delimiter: ' '
