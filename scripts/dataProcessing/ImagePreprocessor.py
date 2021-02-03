@@ -69,11 +69,8 @@ class ImagePreprocessor():
         :return: 4 points of rectangle from upper left counterclockwise, format: (row, col)
         '''
         labels = np.unique(image[image.nonzero()])
-        if np.max(labels) > 255:
-            image = image.astype(dtype='uint16')
-        else:
-            image = image.astype(dtype='uint8')
-        original = original.astype(dtype='uint8')
+        image = image.astype(dtype='float')
+        original = original.astype(dtype='float')
         coords = dict()
         for label in labels:
             coords[label] = list()

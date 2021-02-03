@@ -132,7 +132,7 @@ class Classification:
                 rospy.logwarn('Could not load file \'%s\' as an image', filename)
                 continue
 
-            np_image = np_image.astype(numpy.uint16)
+            np_image = np_image.astype(float)
 
             if numpy.count_nonzero(np_image) > 0:
                 image_empty = False
