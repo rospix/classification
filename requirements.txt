@@ -1,8 +1,10 @@
 scikit-learn==0.22.2.post1
 pyyaml
 rospkg
-scikit-image
+scikit-image==0.18.1
 joblib==1.0.0
 sklearn
 numpy==1.17.4
 opencv-python
+scipy==1.6.0
+pillow==8.1.0
