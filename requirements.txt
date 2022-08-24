@@ -7,4 +7,4 @@ sklearn
 numpy==1.17.4
 opencv-python
 scipy==1.6.0
-pillow==8.1.0
+pillow==9.0.1
