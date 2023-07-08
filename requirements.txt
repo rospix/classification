@@ -4,7 +4,7 @@ rospkg
 scikit-image==0.18.1
 joblib==1.0.0
 sklearn
-numpy==1.17.4
+numpy==1.22.0
 opencv-python
 scipy==1.6.0
 pillow==9.0.1
