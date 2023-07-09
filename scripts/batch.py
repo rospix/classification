@@ -241,7 +241,7 @@ class Classification:
 
                 outfile.write(']')
 
-                proba = -1*numpy.ones((y_unknown.shape[0], len(POSSIBLE_LABELS[1:])))
+                # proba = -1*numpy.ones((y_unknown.shape[0], len(POSSIBLE_LABELS[1:])))
             # #}
 
             # create the image cluester statistics
